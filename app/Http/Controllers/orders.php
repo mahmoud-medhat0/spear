@@ -63,7 +63,7 @@ class orders extends Controller
             'cost' => $request['cost'],
 
         ]);
-        $id = DB::table('orders')->select('id')->latest('created_at')->where('id_company', '=', $request->id_company)->get()[0]->id;
+        $id = DB::table('orders')->select('id')->latest('created_at')->get()[0]->id;
         DB::table('orders')
         ->latest('created_at')
         ->where('id_company', '=', $request->id_company)
