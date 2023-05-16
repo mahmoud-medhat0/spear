@@ -44,40 +44,40 @@ class ordersimport implements ToCollection, WithBatchInserts
                 $id_police=config('app.name') . '-' . $orderid;
                 $idorder = DB::table('orders')->select('id')->where('id_police', '=', $id_police)->get()['0']->id;
                 $order = DB::table('orders')->select('*')->where('id', '=', $idorder);
-                $row[8] = Carbon::instance(Date::excelToDateTimeObject($row[8]))->format('y-m-d');
-                if ($row[1] == null) {
-                    $row[1] = 'none';
+                $row[7] = Carbon::instance(Date::excelToDateTimeObject($row[7]))->format('y-m-d');
+                if ($row[0] == null) {
+                    $row[0] = 'none';
                     $order->update([
-                        'name_client' => $row[1]
+                        'name_client' => $row[0]
                     ]);
                 } else {
                     $order->update([
-                        'name_client' => $row[1]
+                        'name_client' => $row[0]
+                    ]);
+                }
+                if ($row[1] == null) {
+                    $row[1] = 'none';
+                    $order->update([
+                        'phone' => $row[1]
+                    ]);
+                } else {
+                    $order->update([
+                        'phone' => $row[1]
                     ]);
                 }
                 if ($row[2] == null) {
                     $row[2] = 'none';
                     $order->update([
-                        'phone' => $row[2]
+                        'phone2' => $row[2]
                     ]);
                 } else {
                     $order->update([
-                        'phone' => $row[2]
+                        'phone2' => $row[2]
                     ]);
                 }
-                if ($row[3] == null) {
-                    $row[3] = 'none';
-                    $order->update([
-                        'phone2' => $row[3]
-                    ]);
-                } else {
-                    $order->update([
-                        'phone2' => $row[3]
-                    ]);
-                }
-                if ($row[4] != null) {
+                if ($row[3] != null) {
                     foreach ($centers as $center) {
-                        if ($row[4] == $center->center_name) {
+                        if ($row[3] == $center->center_name) {
                             $agent_id = $center->id_agent;
                             $order->update([
                                 'center_id' => $center->id,
@@ -87,7 +87,7 @@ class ordersimport implements ToCollection, WithBatchInserts
                     }
                 } else {
                     foreach ($centers as $center) {
-                        if (str_contains($row[5], $center->center_name)) {
+                        if (str_contains($row[4], $center->center_name)) {
                             $agent_id = $center->id_agent;
                             $order->update([
                                 'center_id' => $center->id,
@@ -96,55 +96,55 @@ class ordersimport implements ToCollection, WithBatchInserts
                         }
                     }
                     foreach ($subcenters as $subcenter) {
-                        if (str_contains($row[5], $subcenter->name)) {
+                        if (str_contains($row[4], $subcenter->name)) {
                             $order->update([
                                 'center_id' => $subcenter->id_center,
                             ]);
                         }
                     }
                 }
-                if ($row[5] == null) {
-                    $row[5] = 'none';
+                if ($row[4] == null) {
+                    $row[4] = 'none';
                     $order->update([
-                        'address' => $row[5]
+                        'address' => $row[4]
                     ]);
                 } else {
                     $order->update([
-                        'address' => $row[5]
+                        'address' => $row[4]
+                    ]);
+                }
+                if ($row[5] != null) {
+                    $order->update([
+                        'cost' => $row[5]
                     ]);
                 }
                 if ($row[6] != null) {
                     $order->update([
-                        'cost' => $row[6]
-                    ]);
-                }
-                if ($row[7] != null) {
-                    $order->update([
-                        'salary_charge' => $row[7]
+                        'salary_charge' => $row[6]
                     ]);
                 } else {
                     $order->update([
                         'salary_charge' => 0
                     ]);
                 }
+                if ($row[7] == null) {
+                    $row[7] = 'none';
+                    $order->update([
+                        'date' => $row[7]
+                    ]);
+                } else {
+                    $order->update([
+                        'date' => $row[7]
+                    ]);
+                }
                 if ($row[8] == null) {
                     $row[8] = 'none';
                     $order->update([
-                        'date' => $row[8]
+                        'notes' => $row[8]
                     ]);
                 } else {
                     $order->update([
-                        'date' => $row[8]
-                    ]);
-                }
-                if ($row[9] == null) {
-                    $row[9] = 'none';
-                    $order->update([
-                        'notes' => $row[9]
-                    ]);
-                } else {
-                    $order->update([
-                        'notes' => $row[9]
+                        'notes' => $row[8]
                     ]);
                 }
                 if ($row[11] == null) {
