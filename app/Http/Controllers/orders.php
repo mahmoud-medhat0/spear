@@ -53,7 +53,7 @@ class orders extends Controller
         ];
         $request->validate($validate);
         $special_intructions2 = DB::table('companies')->select('special_intructions')->where('id', '=', $request->id_company)->get()[0]->special_intructions;
-        DB::table('orders')->insert([
+        $data = [
             'id_company' => $request->id_company,
             'name_client' => $request->name_client,
             'phone' => $request->phone,
@@ -62,16 +62,14 @@ class orders extends Controller
             'address' => $request['address'],
             'cost' => $request['cost'],
 
-        ]);
-        $id = DB::table('orders')->select('id')->latest('created_at')->get()[0]->id;
+        ];
+        $id = DB::table('orders')->insertGetId($data);
         DB::table('orders')
-        ->latest('created_at')
-        ->where('id_company', '=', $request->id_company)
-        ->where('phone', $request->phone)
+        ->where('id',$id)
         ->update([
             'id_police' => config('app.name') . '-' . $id
         ]);
-    
+
         if ($request['phone2'] == null) {
             $request['phone2'] = '*';
         } else {
